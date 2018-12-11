@@ -3,6 +3,8 @@
 ; ======================================================================================================================
 #NoEnv
 #SingleInstance, force
+#Include %A_ScriptDir%\Lib\Class_RichEditDlgs.ahk
+#Include %A_ScriptDir%\Lib\Class_RichEdit.ahk
 SetBatchLines, -1
 SetWinDelay, -1
 SetControlDelay, -1
@@ -350,8 +352,6 @@ If (File := RichEditDlgs.FileDlg(RE2, "O")) {
       Open_File := File
    }
    GoSub, UpdateGui
-   ###_txt := RE2.GetRTF(Selection := False)
-   ###_V("RE2", RE2.HWND, ###_txt)
 }
 RE2.SetModified()
 GuiControl, Focus, % RE2.HWND
@@ -991,6 +991,6 @@ SetTabStopsGui(RE) {
    Return
 }
 ; ======================================================================================================================
-#Include Class_RichEdit.ahk
-#Include Class_RichEditDlgs.ahk
+; #Include Class_RichEdit.ahk
+; #Include Class_RichEditDlgs.ahk
 ; ======================================================================================================================
