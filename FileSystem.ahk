@@ -1,3 +1,34 @@
+#SingleInstance force
+#Warn All, StdOut 
+DetectHiddenWindows, On
+SetWorkingDir, %A_ScriptDir%
+
+global showTooltip := True
+
+MyFileSystem := new FileSystem ; create my instance
+MyNewContainer := new MyFileSystem.Directory( A_ScriptDir ) ; create a container for folder
+; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, 3 ) ; use to scan the 2nd and 3rd sub levels of the specified folder
+; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, -1 ) ; use for full scan of the specified folder
+; MyNewContainer := new MyFileSystem.Drive( "Z:\", 2 ) ; use to scan the root and 2nd level of the specified drive
+if ( showTooltip )
+	ToolTip ; hide last tooltip
+
+str := MyNewContainer.listFiles() ; get the list of files and folders contained in the MyNewContainer object
+Gui, Add, Edit, w800 r25 ReadOnly, % SubStr( str, 1, 30000 ) . ( StrLen( str ) > 30000 ? "`n..." : "" ) ; limit because of 32k limit of Edit control
+Gui, Add, Button, default, Close
+GuiControl, Focus, Close
+Gui, Show
+
+return
+
+ButtonClose:
+ExitApp
+
+
+; ------------------------------------------------
+; Original class FileSystem from nnnik (https://autohotkey.com/boards/viewtopic.php?f=7&t=41332)
+; Adapted by JnLlnd (Jean Lalonde)
+
 class FileSystem {
 	class FileSystemElement {
 		getAttributes() { ;flag string see AutoHotkey Help: FileExist for more infos
@@ -57,7 +88,7 @@ class FileSystem {
 	class File extends FileSystem.FileSystemElement {
 		__New( fileName ) {
 			if ( !fileExist( fileName ) )
-				Throw exception( "File """ . path . """ doesn't exist", "__New", "Exist test returned false" )
+				Throw exception( "File """ . fileName . """ doesn't exist", "__New", "Exist test returned false" )
 			if ( inStr( fileExist( fileName ), "D" ) ) ;if file is a folder or a drive
 				Throw exception( "Error creating File", "__New", "Path points to Folder" )
 			Loop, Files, % strReplace(fileName,"/","\"), F ;since the fileName refers to a single file this loop will only execute once
@@ -81,6 +112,58 @@ class FileSystem {
 		}
 	}
 	class FileContainer extends FileSystem.FileSystemElement {
+		__New( path, recurseLevels := 1 ) {
+			; path -> folder or drive root to scan
+			; recurseLevels -> number of folder levels to scan (default 1 this path only, -1 to scan all, 0 to scan none)
+			if ( !fileExist( path ) )
+				Throw exception( "Path """ . path . """ doesn't exist", "__New", "Exist test returned false" )
+			if ( !inStr( fileExist( path ), "D" ) ) ; if file is not a folder or a drive
+				Throw exception( "Error creating File", "__New", "Path does not points to Folder" )
+			this.name := path
+			if ( SubStr( path, 0, 1 ) = "\" ) ; remove ending backslash for drive roots (like "C:\")
+				path := SubStr( path, 1, StrLen( path ) - 1 )
+			if !( this.getFilesInFolder( path, recurseLevels ) )
+				Throw exception( "Error getting Files", "__New", "Could not get files from folder" )
+		}
+		getFilesInFolder( thisPath, recurseLevels ) {
+			; thisPath -> folder or drive root to scan
+			; recurseLevels -> number of folder levels to scan including this one
+			if ( showToolTip )
+				ToolTip, Getting files from:`n%thisPath%
+			; if recurseLevels > 0 continue with sub folder
+			; if recurseLevels < 0 continue until the end of branch
+			; if recurseLevels = 0 stop recursion
+			if ( recurseLevels = 0 )
+				return true
+			this.Files := Object()
+			Loop, Files, % thisPath . "\*.*", FD ; do not use "R" here, the class does the recursion below
+			{
+				if A_LoopFileAttrib contains H,S  ; skip any file that is either H (Hidden) or S (System)
+					continue
+				if A_LoopFileAttrib contains D  ; this is a folder, recurse to sub level
+					objItem := new FileSystem.Directory( A_LoopFileFullPath, recurseLevels - 1 ) ; "- 1" to track the number of levels
+				else
+					objItem := new FileSystem.File( A_LoopFileFullPath )
+				this.addItem(objItem)
+			}
+			return true
+		}
+		listFiles( filter := "", recurseLevels := -1 ) {
+			thisList := ""
+			for intKey, objItem in this.Files {
+				if !StrLen(filter) or InStr(objItem.name, filter)
+					thisList .= objItem.name . "`n"
+				; if recurseLevels > 0 continue with sub folder
+				; if recurseLevels < 0 continue until the end of branch
+				; if recurseLevels = 0 stop recursion
+				if (objItem.HasKey("Files") and recurseLevels <> 0) ; this is a container, recurse
+					thisList .= objItem.listFiles( filter, recurseLevels - 1)
+			}
+			return thisList
+		}
+		addItem(objItem) {
+			this.Files.InsertAt(this.Files.Length()+ 1, objItem)
+		}
 		getPathName() {
 			Throw exception( "Couldn't find method" , A_ThisFunc, "Method: " . A_ThisFunc . " is not available for objects of Class: " . this.__class )
 		}
