@@ -5,15 +5,20 @@ SetWorkingDir, %A_ScriptDir%
 
 global showTooltip := True
 
-MyFileSystem := new FileSystem ; create my instance
-MyNewContainer := new MyFileSystem.Directory( A_ScriptDir ) ; create a container for folder
+MyFileSystem := new FileSystem ; create my instance of the class
+MyNewContainer := new MyFileSystem.Directory( A_ScriptDir ) ; create a container for the specified folder and get files in this folder only
 ; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, 3 ) ; use to scan the 2nd and 3rd sub levels of the specified folder
 ; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, -1 ) ; use for full scan of the specified folder
 ; MyNewContainer := new MyFileSystem.Drive( "Z:\", 2 ) ; use to scan the root and 2nd level of the specified drive
+
 if ( showTooltip )
 	ToolTip ; hide last tooltip
 
+; get content from the MyNewContainer object
 str := MyNewContainer.listFiles() ; get the list of files and folders contained in the MyNewContainer object
+; str := MyNewContainer.listFiles("w", 2) ; to get only files and folders with "w" in their name and stop at 3rd level
+
+; show content in Gui
 Gui, Add, Edit, w800 r25 ReadOnly, % SubStr( str, 1, 30000 ) . ( StrLen( str ) > 30000 ? "`n..." : "" ) ; limit because of 32k limit of Edit control
 Gui, Add, Button, default, Close
 GuiControl, Focus, Close
@@ -123,7 +128,7 @@ class FileSystem {
 			if ( SubStr( path, 0, 1 ) = "\" ) ; remove ending backslash for drive roots (like "C:\")
 				path := SubStr( path, 1, StrLen( path ) - 1 )
 			if !( this.getFilesInFolder( path, recurseLevels ) )
-				Throw exception( "Error getting Files", "__New", "Could not get files from folder" )
+				Throw exception( "Error getting Items", "__New", "Could not get items from container" )
 		}
 		getFilesInFolder( thisPath, recurseLevels ) {
 			; thisPath -> folder or drive root to scan
@@ -135,34 +140,38 @@ class FileSystem {
 			; if recurseLevels = 0 stop recursion
 			if ( recurseLevels = 0 )
 				return true
-			this.Files := Object()
+			this.Items := Object() ; create an object to contain items (files and folders)
 			Loop, Files, % thisPath . "\*.*", FD ; do not use "R" here, the class does the recursion below
 			{
-				if A_LoopFileAttrib contains H,S  ; skip any file that is either H (Hidden) or S (System)
+				if A_LoopFileAttrib contains H,S ; skip hidden or system files
 					continue
-				if A_LoopFileAttrib contains D  ; this is a folder, recurse to sub level
+				if A_LoopFileAttrib contains D ; this is a folder, create Directory object and recurse to sub level
 					objItem := new FileSystem.Directory( A_LoopFileFullPath, recurseLevels - 1 ) ; "- 1" to track the number of levels
-				else
+				else ; this is a file, create File object
 					objItem := new FileSystem.File( A_LoopFileFullPath )
-				this.addItem(objItem)
+				this.addItem(objItem) ; add Directory or File object to Items container
 			}
 			return true
 		}
 		listFiles( filter := "", recurseLevels := -1 ) {
+			; filter -> exclude items with filter in their name, default empty (include all items)
+			; recurseLevels -> number of folder levels to scan (default -1 to scan all, 0 to scan none)
+			; if recurseLevels > 0 continue with sub folder
+			; if recurseLevels < 0 continue until the end of branch
+			; if recurseLevels = 0 stop recursion
+			if (recurseLevels = 0)
+				return
 			thisList := ""
-			for intKey, objItem in this.Files {
+			for intKey, objItem in this.Items {
 				if !StrLen(filter) or InStr(objItem.name, filter)
 					thisList .= objItem.name . "`n"
-				; if recurseLevels > 0 continue with sub folder
-				; if recurseLevels < 0 continue until the end of branch
-				; if recurseLevels = 0 stop recursion
-				if (objItem.HasKey("Files") and recurseLevels <> 0) ; this is a container, recurse
-					thisList .= objItem.listFiles( filter, recurseLevels - 1)
+				if ( objItem.HasKey( "Items" ) ) ; this is a container, recurse
+					thisList .= objItem.listFiles( filter, recurseLevels - 1 ) ; "- 1" to track the number of levels
 			}
 			return thisList
 		}
 		addItem(objItem) {
-			this.Files.InsertAt(this.Files.Length()+ 1, objItem)
+			this.Items.InsertAt(this.Items.Length()+ 1, objItem) ; add Directory or File object to Items container
 		}
 		getPathName() {
 			Throw exception( "Couldn't find method" , A_ThisFunc, "Method: " . A_ThisFunc . " is not available for objects of Class: " . this.__class )
