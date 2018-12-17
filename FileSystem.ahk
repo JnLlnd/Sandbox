@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir%
 global showTooltip := True
 
 MyFileSystem := new FileSystem ; create my instance of the class
-MyNewContainer := new MyFileSystem.Directory( A_ScriptDir ) ; create a container for the specified folder and get files in this folder only
+MyNewContainer := new MyFileSystem.Directory(  ) ; create a container for the specified folder and get files in this folder only
 ; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, 3 ) ; use to scan the 2nd and 3rd sub levels of the specified folder
 ; MyNewContainer := new MyFileSystem.Directory( A_ScriptDir, -1 ) ; use for full scan of the specified folder
 ; MyNewContainer := new MyFileSystem.Drive( "Z:\", 2 ) ; use to scan the root and 2nd level of the specified drive
