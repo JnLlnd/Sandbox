@@ -1,0 +1,41 @@
+#requires AutoHotkey v1.1
+#SingleInstance,Force
+#NoEnv
+
+Hotkey, !F1, DoIt
+Hotkey, !F2, DoIt
+
+return
+
+DoIt:
+MsgBox, %A_ThisLabel% with: %A_ThisHotkey%
+if (A_ThisHotkey = "!F1")
+	Send, !{F2}
+return
+
+/*
+
+; Handles for the "Hotkey, If" condition
+#If, CanDoIt() ; Open favorite from Shortcut
+#If
+
+; enable shortcut if CanDoIt() condition met
+Hotkey, If, CanDoIt()
+Hotkey, !q, DoIt
+Hotkey, !w, DoIt
+Hotkey, If
+
+return
+
+DoIt:
+MsgBox, %A_ThisLabel% with: %A_ThisHotkey%
+if (A_ThisHotkey = "!q")
+	Send, !w
+return
+
+CanDoIt()
+{
+	return true ; can 
+	; return false ; cannot
+}
+

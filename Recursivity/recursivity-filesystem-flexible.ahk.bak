@@ -1,0 +1,120 @@
+#SingleInstance force
+
+global strRoot := "N:\AutoHotkey\SandBox\Recursivity\Recursivity_Simple"
+; global strRoot := "N:\AutoHotkey\SandBox\Recursivity\Recusivity"
+; global strRoot := "N:"
+
+SplitPath, strRoot, strRootName ; used in gui only
+
+; str := ScanFilesMsgBox(strRoot) ; recursive function
+; str := ScanFilesLoopFiles(strRoot) ; recursive function
+; str := ScanFilesHeader(strRoot) ; recursive function
+str := ScanFilesIndent(strRoot) ; recursive function
+
+ToolTip ; close ToolTip (used in ScanFilesIndent)
+
+Gosub, ShowFiles ; build and show gui
+
+return
+
+
+;------------------------------------------------
+ScanFilesMsgBox(strFolder)
+;------------------------------------------------
+{
+	intLevel++
+	
+	Loop, Files, %strFolder%\*.*, FD ; scan files and folders (in undertermined order)
+		if InStr(FileExist(A_LoopFileFullPath), "D")
+			str .= %A_ThisFunc%(A_LoopFileFullPath) ; recursive call to the current function
+		else
+			str .= StrReplace(A_LoopFileFullPath, strRoot, ".") . "`n"
+	
+	MsgBox, , % StrReplace(A_LoopFileFullPath, strRoot, "."), %str%
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ScanFilesLoopFiles(strFolder)
+;------------------------------------------------
+{
+	intLevel++
+	
+	Loop, Files, %strFolder%\*.*, F ; first scan files only
+		str .= StrReplace(A_LoopFileFullPath, strRoot, ".") . "`n"
+	Loop, Files, %strFolder%\*.*, D ; then scan folders only
+		str .= %A_ThisFunc%(A_LoopFileFullPath)
+	
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ScanFilesHeader(strFolder)
+;------------------------------------------------
+{
+	intLevel++
+	
+	Loop, Files, %strFolder%\*.*, F
+		str .= StrReplace(A_LoopFileFullPath, strFolder . "\") . "`n"
+	Loop, Files, %strFolder%\*.*, D
+	{
+		str .= Format("{:U}", StrReplace(A_LoopFileFullPath, strRoot . "\")) . "`n" ; insert upper case folder name
+		str .= %A_ThisFunc%(A_LoopFileFullPath)
+	}
+	
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ScanFilesIndent(strFolder, intLevel := 0)
+;------------------------------------------------
+{
+	ToolTip, Scanning: %strFolder%
+	loop, %intLevel%
+		strIndent .= "  " ; add spaces according to number of sub levels
+	intLevel++
+	
+	Loop, Files, %strFolder%\*.*, F ; scan files only
+		str .= strIndent . StrReplace(A_LoopFileFullPath, strRoot . "\") . "`n"
+	Loop, Files, %strFolder%\*.*, D ; scan folders only
+	{
+		str .= strIndent . StrReplace(A_LoopFileFullPath, strRoot . "\") . "`n"
+		str .= %A_ThisFunc%(A_LoopFileFullPath, intLevel)
+	}
+	
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ShowFiles:
+;------------------------------------------------
+Gui, Font, w700
+Gui, Add, Text, , Files under %strRootName%
+Gui, Font
+Gui, Font, , Courier New
+Gui, Add, Edit, vFiles w600 r25
+GuiControl, , Files, %str%
+Gui, Font
+Gui, Add, Button, vCloseExit gCloseExit default, Close and Exit
+GuiControl, Focus, CloseExit
+Gui, Show
+return
+;------------------------------------------------
+
+
+;------------------------------------------------
+CloseExit:
+;------------------------------------------------
+Gui, Destroy
+ExitApp
+;------------------------------------------------
+
+

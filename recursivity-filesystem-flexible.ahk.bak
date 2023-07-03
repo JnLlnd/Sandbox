@@ -1,0 +1,75 @@
+#SingleInstance force
+
+; strRoot := "E:\Dropbox\Recusivity"
+strRoot := "E:\Dropbox\Recursivity_Simple"
+
+str := ScanFiles(strRoot) ; recursive function
+; str := ScanFilesIndent(strRoot) ; recursive function
+
+Gosub, ShowFiles
+
+return
+
+
+;------------------------------------------------
+ScanFiles(strFolder, intLevel := 0)
+;------------------------------------------------
+{
+	intLevel++
+	
+	Loop, Files, %strFolder%\*.*, F ; scan files only
+		str .= A_LoopFileFullPath . "`n"
+	Loop, Files, %strFolder%\*.*, D ; scan folders only
+		str .= A_ThisFunc(A_LoopFileFullPath, intLevel)
+	
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ScanFilesIndent(strFolder, intLevel := 0)
+;------------------------------------------------
+{
+	intLevel++
+	loop, %intLevel%
+		strIndent .= "  "
+	
+	Loop, Files, %strFolder%\*.*, D ; scan folders only
+	{
+		str .= strIndent . A_LoopFileName . "`n"
+		str .= ScanFilesIndent(A_LoopFileFullPath, intLevel)
+	}
+	Loop, Files, %strFolder%\*.*, F ; scan files only
+		str .= strIndent . A_LoopFileName . "`n"
+	
+	MsgBox, , %strFolder%, %str%
+	return str
+}
+;------------------------------------------------
+
+
+;------------------------------------------------
+ShowFiles:
+;------------------------------------------------
+Gui, Font, w700
+Gui, Add, Text, , Files under %strRoot%
+Gui, Font
+Gui, Font, , Courier New
+Gui, Add, Edit, w800 r25, %str%
+Gui, Font
+Gui, Add, Button, vCloseExit gCloseExit default, Close and Exit
+GuiControl, Focus, CloseExit
+Gui, Show
+return
+;------------------------------------------------
+
+
+;------------------------------------------------
+CloseExit:
+;------------------------------------------------
+Gui, Destroy
+ExitApp
+;------------------------------------------------
+
+

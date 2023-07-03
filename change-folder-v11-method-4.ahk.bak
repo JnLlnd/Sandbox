@@ -1,0 +1,114 @@
+#Requires AutoHotkey v1.1
+#NoEnv
+#SingleInstance force
+
+Global strEnv := A_AhkVersion . " | " . A_OSVersion . " | " . A_Is64bitOS . " | " . A_Language
+Global strLog := "Test_Name | Test_Result | A_AhkVersion | A_OSVersion | A_Is64bitOS | A_Language`r`n"
+StringReplace, strLogFile, A_ScriptName, .ahk
+strLogFile := A_Temp . "\" . strLogFile . ".log"
+
+; Info("The script will open ""Windows Explorer"".")
+run, Explorer
+
+return
+
+^1::
+    Explorer_Navigate("C:\Windows")
+Return
+
+; ------------------
+
+ControlEdit1Exist()
+{
+	ControlGet, strOut, Enabled,, Edit1, A
+	return not ErrorLevel
+}
+
+Info(str)
+{
+	MsgBox, 4161, Diag, %str%`n`nPress OK to continue.
+	IfMsgBox, Cancel
+		ExitApp
+}
+
+CheckResult(strTestName, strQuestion)
+{
+	MsgBox, 4131, Diag, %strQuestion%
+	IfMsgBox, Cancel
+		ExitApp
+	IfMsgBox, Yes
+		strResult := 1
+	IfMsgBox, No
+		strResult := 0
+	Log(strTestName, strResult)
+}
+
+Log(strTestName, strResult)
+{
+	strLog := strLog . strTestName . " | " . strResult . " | " . strEnv . "`r`n"
+}
+
+Explorer_Navigate(FullPath, hwnd="") {  ; by Learning one
+    hwnd := (hwnd="") ? WinExist("A") : hwnd ; if omitted, use active window
+    WinGet, ProcessName, ProcessName, % "ahk_id " hwnd
+    if (ProcessName != "explorer.exe")  ; not Windows explorer
+        return
+    For pExp in ComObjCreate("Shell.Application").Windows
+    {
+        if (pExp.hwnd = hwnd) { ; matching window found
+			activeTab := 0
+			try ControlGet, activeTab, Hwnd,, % "ShellTabWindowClass1", % "ahk_id" hwnd
+			if activeTab {
+				static IID_IShellBrowser := "{000214E2-0000-0000-C000-000000000046}"
+				shellBrowser := ComObjQuery(pExp, IID_IShellBrowser, IID_IShellBrowser)
+				DllCall(NumGet(numGet(shellBrowser+0)+3*A_PtrSize), "Ptr", shellBrowser, "UInt*", thisTab)
+				###_V("1", hwnd, activeTab, thisTab)
+				if (thisTab != activeTab)
+					continue
+				ObjRelease(shellBrowser)
+			}
+			; GetActiveTab(hwnd).Navigate("file:///" FullPath)
+			pExp.Navigate("file:///" FullPath)
+			return
+			}
+    }
+}
+
+/*
+GetActiveTab(w) {
+; adapted from ntepa (https://www.autohotkey.com/boards/viewtopic.php?p=488735#p488735)
+    activeTab := 0
+    try ControlGet, activeTab, Hwnd,, % "ShellTabWindowClass1", % "ahk_id" hwnd
+	if activeTab {
+		static IID_IShellBrowser := "{000214E2-0000-0000-C000-000000000046}"
+		shellBrowser := ComObjQuery(w, IID_IShellBrowser, IID_IShellBrowser)
+		DllCall(NumGet(numGet(shellBrowser+0)+3*A_PtrSize), "Ptr", shellBrowser, "UInt*", thisTab)
+		###_V("1", hwnd, activeTab, thisTab)
+		if (thisTab != activeTab)
+			continue
+		ObjRelease(shellBrowser)
+	}
+	return w
+}
+GetActiveExplorerTab(hwnd:="") {
+; adapted from ntepa (https://www.autohotkey.com/boards/viewtopic.php?p=488735#p488735)
+    if !hwnd
+        hwnd := WinExist("A")
+    activeTab := 0
+    try ControlGet, activeTab, Hwnd,, % "ShellTabWindowClass1", % "ahk_id" hwnd
+    for w in ComObjCreate("Shell.Application").Windows {
+        if (w.hwnd != hwnd)
+            continue
+        if activeTab {
+            static IID_IShellBrowser := "{000214E2-0000-0000-C000-000000000046}"
+            shellBrowser := ComObjQuery(w, IID_IShellBrowser, IID_IShellBrowser)
+            DllCall(NumGet(numGet(shellBrowser+0)+3*A_PtrSize), "Ptr", shellBrowser, "UInt*", thisTab)
+			###_V("1", hwnd, activeTab, thisTab)
+            if (thisTab != activeTab)
+                continue
+            ObjRelease(shellBrowser)
+        }
+        return w
+    }
+}
+*/
