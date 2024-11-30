@@ -1,6 +1,0 @@
-
-FileRead, str, %A_ScriptDir%\mytext.txt
-MsgBox, %str%
-
-loop, parse, str
-	MsgBox, %A_LoopField%
