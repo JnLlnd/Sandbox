@@ -2,13 +2,18 @@
 #SingleInstance, Force
 SetWorkingDir %A_ScriptDir% 
 
+; ClipboardAll may also be saved to a file (in this mode, FileAppend always overwrites any existing file):
+FileAppend, %ClipboardAll%, C:\Company Logo.clip ; The file extension does not matter.
 
+; To later load the file back onto the clipboard (or into a variable), follow this example:
+FileRead, Clipboard, *c C:\Company Logo.clip ; Note the use of *c, which must precede the filename.
 
-; SAVE IMAGE IN CLIPBOARD TO PNG FILE
+; CHECK IF CLIPBOARD CONTAINS BITMAP
 CF_BITMAP := 2
 if !DllCall("IsClipboardFormatAvailable", "UInt", CF_BITMAP)
       ###_D("There is no image in the Clipboard")
 	  
+; SAVE IMAGE IN CLIPBOARD TO PNG FILE
 destPngFilePath := A_ScriptDir . "\ClipboardImage.png"
 hBitmap := GetBitmapFromClipboard()
 HBitmapToPng(hBitmap, destPngFilePath)
