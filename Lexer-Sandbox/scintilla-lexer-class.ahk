@@ -15,24 +15,27 @@ Gosub, OkStuff
 
 ; Testing stuff
 
-global g_blnSyntaxHighlighting := 1 ; make it an option
-global g_strThemeName := "Light" ; or "Dark", make it an option
+; make option with these global variables
+global g_blnSyntaxHighlighting := 1
+global g_blnHighlightActiveLine := 1
+global g_strThemeName := "Light" ; or "Dark"
+global g_strSyntaxTypeName := "TXT"
+
 if (g_blnSyntaxHighlighting)
 	o_Lex := new Lexer()
 
 Gosub, SetTestTextTXT
-global g_strSyntaxTypeName := "TXT" ; make it an option
-o_Lex.SetLexing(g_strSyntaxTypeName)
+; o_Lex.SetLexerType(g_strSyntaxTypeName)
 Sleep, 2000
 
 Gosub, SetTestTextAHK
-global g_strSyntaxTypeName := "AHK" ; make it an option
-o_Lex.SetLexing(g_strSyntaxTypeName)
+g_strSyntaxTypeName := "AHK" ; make it an option
+o_Lex.SetLexerType(g_strSyntaxTypeName)
 Sleep, 2000
 
 Gosub, SetTestTextHTML
-global g_strSyntaxTypeName := "HTML" ; make it an option
-o_Lex.SetLexing(g_strSyntaxTypeName)
+g_strSyntaxTypeName := "HTML" ; make it an option
+o_Lex.SetLexerType(g_strSyntaxTypeName)
 Sleep, 2000
 
 return
@@ -40,6 +43,9 @@ return
 
 ;-------------------------------------------------------------
 class Lexer
+; based on Adventure IDE 3.0.4 developed by Alguimist (Gilberto Barbosa Babiretzki)
+; Source: https://sourceforge.net/projects/autogui/
+; Forum: https://www.autohotkey.com/boards/viewforum.php?f=64
 ;-------------------------------------------------------------
 {
 	aaXMLFileTypes := Object() ; file types
@@ -52,20 +58,11 @@ class Lexer
 	{
 		this.LoadFileTypes()
 		this.LoadTheme()
-	/*
-    ; Language-specific and theme
-    Sci[n].Type := Type
-    Sci[n].SetLexer(GetLexerByLexType(Type))
-    LoadLexerData(Type, g_ThemeNameEx)
-    SetKeywords(n, Type)
-    ApplyTheme(n, Type)
-    SetProperties(n, Type)
-	*/
 	}
 	;---------------------------------------------------------
 
 	;---------------------------------------------------------
-	SetLexing(strType)
+	SetLexerType(strType)
 	;---------------------------------------------------------
 	{
 		o_Sci.Type := strType
@@ -80,12 +77,8 @@ class Lexer
 	LoadFileTypes()
 	;---------------------------------------------------------
 	{
-		; Local oFileExts, oFileExt, Ext, Type, Desc, oFileTypes, Id, Name, Lexer, DN
-
 		If (!LoadXMLEx(oXMLFileTypes, A_ScriptDir . "\Settings\FileTypes.xml"))
-		{
 			Return
-		}
 
 		oFileExts := oXMLFileTypes.selectNodes("/ftypes/extensions/ext")
 		For oFileExt in oFileExts
@@ -126,9 +119,8 @@ class Lexer
 	LoadTheme()
 	;---------------------------------------------------------
 	{
-		If (!LoadXMLEx(oXML, A_WorkingDir . "\Themes\Themes-QCE.xml")) {
+		If (!LoadXMLEx(oXML, A_WorkingDir . "\Themes\Themes-QCE.xml"))
 			Return 0
-		}
 
 		Node := oXML.selectSingleNode("/themes/theme[@name='" . g_strThemeName . "']")
 
@@ -216,14 +208,13 @@ class Lexer
 	; Load specific language styles, keywords and properties
 	;---------------------------------------------------------
 	{
-		Local BaseName, ThemeFile, oXML, oStyles, oStyle, oKWGroups, oKWGroup, nGroup, oProps, oProp, Name, Value
-
 		BaseName := this.GetNameByLexType(Type)
 		If (this.aaColors[Type].Loaded || BaseName == "")
 			Return 0
 
 		ThemeFile := A_ScriptDir . "\Themes\Specifics\" . BaseName . ".xml"
-		If (!IsObject(oXML := LoadXML(ThemeFile)))
+		LoadXMLEx(oXML, ThemeFile)
+		If !IsObject(oXML)
 			Return 0
 
 		; Styles
@@ -304,7 +295,7 @@ class Lexer
 	GetNameByLexType(Type)
 	;---------------------------------------------------------
 	{
-		Return this.aaLexTypes[Type].Name
+		Return this.aaLexTypes[Type].Name ; Base filename
 	}
 	;---------------------------------------------------------
 
@@ -360,8 +351,8 @@ class Lexer
 
 		; Active line background color
 		o_Sci.SetCaretLineBack(this.aaColors["ActiveLine"].BC)
-		o_Sci.SetCaretLineVisible(g_HighlightActiveLine)
-		o_Sci.SetCaretLineVisibleAlways(g_HighlightActiveLine)
+		o_Sci.SetCaretLineVisible(g_blnHighlightActiveLine)
+		o_Sci.SetCaretLineVisibleAlways(g_blnHighlightActiveLine)
 
 		; Matching braces
 		o_Sci.StyleSetBack(STYLE_BRACELIGHT, this.aaColors["ActiveLine"].BC)
@@ -407,7 +398,6 @@ class Lexer
 }
 ;-------------------------------------------------------------
 
-
 ;-------------------------------------------------------------
 LoadXMLEx(ByRef oXML, Fullpath)
 ;-------------------------------------------------------------
@@ -417,7 +407,7 @@ LoadXMLEx(ByRef oXML, Fullpath)
 
     If (!oXML.load(Fullpath))
 	{
-        MsgBox 0x10, Error, % "Failed to load XML file."
+        MsgBox 0x10, Error, % "Failed to load XML file!"
         . "`n`nFilename: """ . Fullpath . """"
         . "`n`nError: " . Format("0x{:X}", oXML.parseError.errorCode & 0xFFFFFFFF)
         . "`n`nReason: " . oXML.parseError.reason
@@ -429,13 +419,6 @@ LoadXMLEx(ByRef oXML, Fullpath)
 ;-------------------------------------------------------------
 
 
-
-LoadXML(Fullpath) {
-    Local x := ComObjCreate("MSXML2.DOMDocument.6.0")
-    x.async := False
-    x.load(Fullpath)
-    Return x
-}
 
 /*
 UNUSED FROM EDITOR.AHK
