@@ -1,6 +1,6 @@
 ﻿<scheme const="BAT">
-    <theme name="Default">
-        <style name="Default" v="0" fc="0x000000" bc="" b="0" i="0" />
+    <theme name="Light">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
         <style name="Comment" v="1" fc="0x767676" bc="" b="0" i="1" />
         <style name="Word" v="2" fc="0x183691" bc="" b="0" i="0" />
         <style name="Label" v="3" fc="0x0000DD" bc="" b="0" i="0" u="1" />
@@ -8,8 +8,16 @@
         <style name="Command" v="5" fc="0x1F609F" bc="" b="0" i="0" />
         <style name="Identifier" v="6" fc="0x759C12" bc="" b="0" i="0" />
         <style name="Operator" v="7" fc="0x880088" bc="" b="0" i="0" />
-    </theme>
-
+    </theme>    <theme name="Dark">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Comment" v="1" fc="0x767676" bc="" b="0" i="1" />
+        <style name="Word" v="2" fc="0x183691" bc="" b="0" i="0" />
+        <style name="Label" v="3" fc="0x0000DD" bc="" b="0" i="0" u="1" />
+        <style name="Hide" v="4" fc="0x4070F0" bc="" b="0" i="0" />
+        <style name="Command" v="5" fc="0x1F609F" bc="" b="0" i="0" />
+        <style name="Identifier" v="6" fc="0x759C12" bc="" b="0" i="0" />
+        <style name="Operator" v="7" fc="0x880088" bc="" b="0" i="0" />
+    </theme>
     <keywords>
         <language id="BAT">
             <group id="0" name="Internal Commands" keywords="assoc aux break call cd chdir cls cmdextversion color com com1 com2 com3 com4 con copy country ctty date defined del dir do dpath echo else endlocal erase errorlevel exist exit for ftype goto if in loadfix loadhigh lpt lpt1 lpt2 lpt3 lpt4 md mkdir mklink move not nul path pause popd prn prompt pushd rd rem ren rename rmdir set setlocal shift start time title type ver verify vol" />

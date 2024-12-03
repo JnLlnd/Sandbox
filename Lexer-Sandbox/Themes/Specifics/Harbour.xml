@@ -1,6 +1,6 @@
 ﻿<scheme const="FS">
-    <theme name="Default">
-        <style name="Default" v="0" fc="0x000000" bc="" b="0" i="0" />
+    <theme name="Light">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
         <style name="Comment" v="1" fc="0x767676" bc="" b="0" i="1" />
         <style name="CommentLine" v="2" fc="0x767676" bc="" b="0" i="1" />
         <style name="CommentDoc" v="3" fc="0x767676" bc="" b="0" i="1" />
@@ -21,7 +21,7 @@
         <style name="Constant" v="18" fc="0x000000" bc="" b="0" i="0" />
         <style name="WordOperator" v="19" fc="0x000000" bc="" b="0" i="0" />
         <style name="DisabledCode" v="20" fc="0x000000" bc="" b="0" i="0" />
-        <style name="Default_C" v="21" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Light_C" v="21" fc="0x000000" bc="" b="0" i="0" />
         <style name="CommentDoc_C" v="22" fc="0x000000" bc="" b="0" i="0" />
         <style name="CommentLineDoc_C" v="23" fc="0x000000" bc="" b="0" i="0" />
         <style name="Keyword_C" v="24" fc="0x000000" bc="" b="0" i="0" />
@@ -32,8 +32,40 @@
         <style name="Operator_C" v="29" fc="0x000000" bc="" b="0" i="0" />
         <style name="Identifier_C" v="30" fc="0x000000" bc="" b="0" i="0" />
         <style name="StringEOL_C" v="31" fc="0x000000" bc="" b="0" i="0" />
-    </theme>
-
+    </theme>    <theme name="Dark">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Comment" v="1" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentLine" v="2" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentDoc" v="3" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentLineDoc" v="4" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentDocKeyword" v="5" fc="0x000000" bc="" b="0" i="0" />
+        <style name="CommentDocKeywordError" v="6" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Keyword" v="7" fc="0x0070A0" bc="" b="0" i="0" />
+        <style name="Keyword2" v="8" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Keyword3" v="9" fc="0x004CB1" bc="" b="1" i="0" />
+        <style name="Keyword4" v="10" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Number" v="11" fc="0x880088" bc="" b="0" i="0" />
+        <style name="String" v="12" fc="0x008000" bc="" b="0" i="0" />
+        <style name="Preprocessor" v="13" fc="0x0000CF" bc="" b="0" i="0" />
+        <style name="Operator" v="14" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Identifier" v="15" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Date" v="16" fc="0x000000" bc="" b="0" i="0" />
+        <style name="StringEOL" v="17" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Constant" v="18" fc="0x000000" bc="" b="0" i="0" />
+        <style name="WordOperator" v="19" fc="0x000000" bc="" b="0" i="0" />
+        <style name="DisabledCode" v="20" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Light_C" v="21" fc="0x000000" bc="" b="0" i="0" />
+        <style name="CommentDoc_C" v="22" fc="0x000000" bc="" b="0" i="0" />
+        <style name="CommentLineDoc_C" v="23" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Keyword_C" v="24" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Keyword2_C" v="25" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Number_C" v="26" fc="0x880088" bc="" b="0" i="0" />
+        <style name="String_C" v="27" fc="0x008000" bc="" b="0" i="0" />
+        <style name="Preprocessor_C" v="28" fc="0x0000CF" bc="" b="0" i="0" />
+        <style name="Operator_C" v="29" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Identifier_C" v="30" fc="0x000000" bc="" b="0" i="0" />
+        <style name="StringEOL_C" v="31" fc="0x000000" bc="" b="0" i="0" />
+    </theme>
     <keywords>
         <language id="XB">
             <group id="0" name="Commands" keywords="? @ accept access all alternate announce ansi any append as assign autolock average begin bell bitmap blank box call cancel case century charset checkbox clear close cls color combobox commit confirm console constant continue copy count create cursor date dbread dbwrite decimals declare default delete deleted delimiters device dir directory display do draw edit eject else elseif end endcase enddo endif endtext epoch erase error escape eval eventmask exact exclusive extended external extra field file filter find fixed font for form format from get gets global global_extern go goto gotop guialign guicolor guicursor guitransl html htmltext if image index input intensity join key keyboard keytransl label lines list listbox local locate margin memory memvar menu message method multibyte multilocks next nfs nfs_force nfslock note on openerror order outmode pack parameters path pixel pop printer private prompt public push pushbutton quit radiobutton radiogroup read recall refresh reindex relation release rename replace report request restore richtext rowadapt rowalign run save say scoreboard scrcompress screen seek select sequence set setenhanced setstandard setunselected skip softseek sort source static store struct structure sum tag tbrowse text to total type typeahead unique unlock update use wait while with wrap xml zap zerobyteout" />

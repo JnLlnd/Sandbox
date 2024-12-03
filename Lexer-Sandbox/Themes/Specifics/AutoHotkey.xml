@@ -1,5 +1,5 @@
 ﻿<scheme const="AHKL">
-    <theme name="Default">
+    <theme name="Light">
         <style name="Identifier" v="1" fc="0x000000" bc="" b="0" i="0" />
         <style name="CommentDoc" v="2" fc="0x008888" bc="" b="0" i="0" />
         <style name="CommentLine" v="3" fc="0x767676" bc="" b="0" i="1" />
@@ -29,8 +29,37 @@
         <style name="UserDefined1" v="27" fc="" bc="" b="0" i="0" />
         <style name="EscapeSeq" v="30" fc="0x660000" bc="" b="0" i="0" />
         <style name="Error" v="31" fc="" bc="" b="0" i="0" />
-    </theme>
-
+    </theme>    <theme name="Dark">
+        <style name="Identifier" v="1" fc="0x000000" bc="" b="0" i="0" />
+        <style name="CommentDoc" v="2" fc="0x008888" bc="" b="0" i="0" />
+        <style name="CommentLine" v="3" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentBlock" v="4" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentKeyword" v="5" fc="0xA50000" bc="" b="0" i="0" />
+        <style name="String" v="6" fc="0x183691" bc="" b="0" i="0" />
+        <style name="StringOpts" v="7" fc="0x0000EE" bc="" b="0" i="0" />
+        <style name="StringBlock" v="8" fc="0x183691" bc="" b="0" i="0" />
+        <style name="StringComment" v="9" fc="0x000000" bc="" b="0" i="0" />
+        <style name="Label" v="10" fc="0x0000DD" bc="" b="0" i="0" u="1" />
+        <style name="Hotkey" v="11" fc="0x0000DD" bc="" b="0" i="0" />
+        <style name="Hotstring" v="12" fc="0x183691" bc="" b="0" i="0" />
+        <style name="HotstringOpt" v="13" fc="0x990099" bc="" b="0" i="0" />
+        <style name="HexNumber" v="14" fc="0x880088" bc="" b="0" i="0" />
+        <style name="DecNumber" v="15" fc="0x880088" bc="" b="0" i="0" />
+        <style name="Var" v="16" fc="" bc="" b="0" i="0" />
+        <style name="VarRef" v="17" fc="0x990055" bc="" b="0" i="0" />
+        <style name="Object" v="18" fc="" bc="" b="0" i="0" />
+        <style name="UserFunction" v="19" fc="0x0000DD" bc="" b="0" i="0" />
+        <style name="Directive" v="20" fc="0x0000CF" bc="" b="0" i="0" />
+        <style name="Command" v="21" fc="0x0070A0" bc="" b="0" i="0" />
+        <style name="Param" v="22" fc="0x0070A0" bc="" b="0" i="0" />
+        <style name="ControlFlow" v="23" fc="0x0000DD" bc="" b="0" i="0" />
+        <style name="BuiltinFunction" v="24" fc="0x0F707F" bc="" b="0" i="0" />
+        <style name="BuiltinVar" v="25" fc="0x9F1F6F" bc="" b="0" i="0" />
+        <style name="Key" v="26" fc="0xA2A2A2" bc="" b="0" i="0" />
+        <style name="UserDefined1" v="27" fc="" bc="" b="0" i="0" />
+        <style name="EscapeSeq" v="30" fc="0x660000" bc="" b="0" i="0" />
+        <style name="Error" v="31" fc="" bc="" b="0" i="0" />
+    </theme>
     <theme name="Monokai">
         <style name="Identifier" v="1" fc="0xF8F8F2" bc="" b="0" i="0" />
         <style name="CommentDoc" v="2" fc="0x008888" bc="" b="0" i="0" />

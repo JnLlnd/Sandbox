@@ -1,6 +1,6 @@
 ﻿<scheme const="GC">
-    <theme name="Default">
-        <style name="Default" v="0" fc="0x000000" bc="" b="0" i="0" />
+    <theme name="Light">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
         <style name="CommentLine" v="1" fc="0x767676" bc="" b="0" i="1" />
         <style name="CommentBlock" v="2" fc="0x767676" bc="" b="0" i="1" />
         <style name="Global" v="3" fc="0x0070A0" bc="" b="1" i="0" />
@@ -10,8 +10,18 @@
         <style name="Command" v="7" fc="0x0070A0" bc="" b="0" i="0" />
         <style name="String" v="8" fc="0x183691" bc="" b="0" i="0" />
         <style name="Operator" v="9" fc="0x000000" bc="" b="0" i="0" />
-    </theme>
-
+    </theme>    <theme name="Dark">
+        <style name="Light" v="0" fc="0x000000" bc="" b="0" i="0" />
+        <style name="CommentLine" v="1" fc="0x767676" bc="" b="0" i="1" />
+        <style name="CommentBlock" v="2" fc="0x767676" bc="" b="0" i="1" />
+        <style name="Global" v="3" fc="0x0070A0" bc="" b="1" i="0" />
+        <style name="Event" v="4" fc="0x0000DD" bc="" b="0" i="0" u="1" />
+        <style name="Attribute" v="5" fc="0x0070A0" bc="" b="0" i="0" />
+        <style name="Control" v="6" fc="0x0F707F" bc="" b="0" i="0" />
+        <style name="Command" v="7" fc="0x0070A0" bc="" b="0" i="0" />
+        <style name="String" v="8" fc="0x183691" bc="" b="0" i="0" />
+        <style name="Operator" v="9" fc="0x000000" bc="" b="0" i="0" />
+    </theme>
     <keywords>
         <language id="G4C">
             <group id="0" name="Globals" keywords="G4C WINDOW NEWFILE TEXTFILE #INCLUDE #NEWFILE ###" />
