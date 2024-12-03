@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<themes>
+    <theme name="Light" specifics="Default">
+        <default fc="0x000000" bc="0xF8F8F8" />
+        <selection fc="0xFFFFFF" bc="0x3399FF" a="256" />
+        <numbersmargin fc="0x000000" bc="0xE8E4E0" />
+        <symbolmargin bc="0xE8E4E0" />
+        <divider bc="0x000000" w="1" />
+        <foldmargin dlc="0x008EBC" bbc="0xFAFAFA" mbc="0xFAFAFA" />
+        <caret fc="0x000000" />
+        <activeline bc="0xFFFFFF" />
+        <bracematch fc="0x3399FF" bc="" b="1" i="0" />
+        <markers t="7" c="0x3FBBE3" a="80" oa="255" />
+        <highlights t="8" c="0x3FBBE3" a="80" oa="80" />
+        <calltip fc="" bc="0xFFFFDD" />
+        <indentguide fc="0xF8F8F8" bc="0x20D010" />
+        <whitespace fc="0x008EBC" bc="0xF8F8F8" />
+    </theme>
+	
+	<theme name="Dark" specifics="Default">
+		<default fc="0xF8F8F2" bc="0x272822"/>
+		<selection fc="0xFFFFFF" bc="0x3399FF" a="60"/>
+		<numbersmargin fc="0xF8F8F2" bc="0x272822"/>
+		<symbolmargin bc="0x272822"/>
+		<divider bc="0x92CC47" w="2"/>
+		<foldmargin dlc="0x008EBC" bbc="0x272822" mbc="0x272822"/>
+		<caret fc="0xF8F8F0"/>
+		<activeline bc="0x3E3D32"/>
+		<bracematch fc="0x3399FF" bc="" b="1" i="0"/>
+		<markers t="7" c="0x3FBBE3" a="80" oa="255"/>
+		<highlights t="8" c="0x3FBBE3" a="80" oa="80"/>
+		<calltip fc="0xF8F8F2" bc="0x808080"/>
+		<indentguide fc="0xF8F8F8" bc="0x20D010"/>
+		<whitespace fc="0x008EBC" bc="0xF8F8F8"/>
+	</theme>
+</themes>
